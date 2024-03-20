@@ -1,13 +1,14 @@
+<h1 align="center">
+🔥 LaDiC: A Diffusion-based Image Captioning Model
+</h1>
 
-# LaDiC: Are Diffusion Models Really Inferior to Autoregressive Counterparts for Image-to-text Generation?
+This is the repo for the official implementation of the NAACL 2024 paper: **LaDiC: Are Diffusion Models Really Inferior to Autoregressive Counterparts for Image-to-text Generation?**
 
-This the repo for offical implementation for NAACL 2024 paper: LaDiC: Are Diffusion Models Really Inferior to Autoregressive Counterparts for Image-to-text Generation?
-
-## Introduction
+## 💡 Introduction
 
 Diffusion models have demonstrated remarkable capabilities in text-to-image generation. However, their performance in image-to-text generation, specifically image captioning, has trailed behind Auto-Regressive (AR) models, casting doubts on their suitability for such tasks. In this work, we reexamine diffusion models, highlighting their capacity for holistic context modeling and parallel decoding. These advantages address the inherent limitations of AR methods, such as slow inference speed, error propagation, and unidirectional constraints. Additionally, We identify the lack of an effective latent space for image-text alignment and the discordance between continuous diffusion processes and discrete textual data in previous works limit their performance. In response, we introduce a novel architecture, LaDiC, featuring a split BERT to create a dedicated latent space for captions and a regularization module to manage varying text lengths. Our framework further incorporates a diffuser for semantic image-to-text conversion and a Back&Refine technique to enhance token interactivity during inference. LaDiC achieves state-of-the-art performance for diffusion-based methods on the MS COCO dataset with a BLEU@4 score of 38.2 and a CIDEr score of 126.2, demonstrating exceptional performance without pretraining or ancillary modules. This indicates strong competitiveness with  AR models, revealing the previously untapped potential of diffusion models in image-to-text generation.
 
-## Method
+## 🚀 Method
 
 <div align=center>
 <img src="img/model.png" width="800" >
@@ -15,7 +16,7 @@ Diffusion models have demonstrated remarkable capabilities in text-to-image gene
 
 An overview of our LaDiC model. It mainly consists of Text Encoder, Diffuser, and Text Decoder. On the left is the diffusion process, and on the right is the denoising process. Initially, the sentence $c$ is converted into a text latent space $\mathcal{X}$ by the text encoder. Subsequently, diffusion is performed on the text latent space, wherein a diffuser is trained to denoise noisy text latent representations $x_t$. Finally, the predicted text latent representation $\hat{x}_0$ without noise is passed through a NAR text decoder to generate the final sentence $\hat{c}$.
 
-## Experimental Results
+## 📖 Experimental Results
 
 <div align=center>
 <img src="img/results.png" width="800" >
@@ -35,7 +36,7 @@ Apart from achieving exceptional performance, we seek to emphasize the unique ad
 - Holistic Context Consideration: Diffusion model takes into account a more comprehensive context, thereby helping to alleviate the error accumulation issues inherent in autoregressive models.
 
 - Flexible Generation Approach: In contrast to the unidirectional generation approach of AR models, the diffusion model adopts a more flexible manner of generation.
-## Environment
+## ⚙️ Environment
 
 Required packages and dependencies are listed in the `ladic.yaml` file. You can install the environment using Conda with the following command:
 
@@ -48,20 +49,7 @@ We also provide docker image as follows:
 ```bash
 docker pull wangyuchi/diffcap:python3.8
 ```
-
-## Datasets
-
-We test on the COCO dataset. You can download [MSCOCO dataset](https://cocodataset.org/#download) and place it into `datasets` folder.
-
-Meanwhile, we follow Karpathy split, and its annotation files can be found in its [orginial paper](https://cs.stanford.edu/people/karpathy/deepimagesent/). Our code will also automatically download these files and you may find them in `datasets/` folder.
-
-## Required pretrained models
-
-In our LaDiC model, Text Encoder and Decoder are initialized from BERT-Base-uncased, which can be downloaded from [Huggingface](https://huggingface.co/bert-base-uncased).
-
-As for image encoder, we utilized pretrained ViT in BLIP. You may download from [here](https://storage.googleapis.com/sfr-vision-language-research/BLIP/models/model_base_capfilt_large.pth) and put it into `pretrained_ckpt` folder. More information can be found in [BLIP&#39;s official repo](https://github.com/salesforce/BLIP).
-
-## Accelerate Configuration
+### Accelerate Configuration
 
 We use accelerate package developed by Huggingface.
 
@@ -73,7 +61,20 @@ accelerate config
 
 Answer the questions based on your actual setup. You will be prompted to specify the GPU to use, and other configurations can be left as default. For more information, refer to [this link](https://huggingface.co/docs/accelerate/v0.13.2/en/quicktour#launching-your-distributed-script).
 
-## Training
+## 🚢 Datasets
+
+We test on the COCO dataset. You can download [MSCOCO dataset](https://cocodataset.org/#download) and place it into `datasets` folder.
+
+Meanwhile, we follow Karpathy split, and its annotation files can be found in its [orginial paper](https://cs.stanford.edu/people/karpathy/deepimagesent/). Our code will also automatically download these files and you may find them in `datasets/` folder.
+
+## 🧰 Required pretrained models
+
+In our LaDiC model, Text Encoder and Decoder are initialized from BERT-Base-uncased, which can be downloaded from [Huggingface](https://huggingface.co/bert-base-uncased).
+
+As for image encoder, we utilized pretrained ViT in BLIP. You may download from [here](https://storage.googleapis.com/sfr-vision-language-research/BLIP/models/model_base_capfilt_large.pth) and put it into `pretrained_ckpt` folder. More information can be found in [BLIP&#39;s official repo](https://github.com/salesforce/BLIP).
+
+
+## 🎇 Training
 
 Launch the `main.py` script using Accelerate with the following command:
 
@@ -93,7 +94,7 @@ parser.add_argument('--resume_ckpt', type=str, default=None, help='resume or not
 parser.add_argument('--logdir', type=str, default='checkpoint', help='logdir')
 ```
 
-## Evaluation
+## ⚖️ Evaluation
 
 Specify `MODEL_NAME` and `RESULLT_FILE` in `coco_eval.py` representing checkpoint to be evaluated and output path respectively. Then you can run
 
@@ -101,19 +102,19 @@ Specify `MODEL_NAME` and `RESULLT_FILE` in `coco_eval.py` representing checkpoin
 python coco_eval.py
 ```
 
-## TODO List
+## 📆 TODO List
 - [ ] Add more scripts for more flexible testing.
 - [ ] Clean unrelated code.
 - [ ] Provide pretraining checkpoint.
 - [x] Provide training and testing code.
 - [ ] Paper released on arXiv.
 
-## Reference
+## ☕ Reference
  If you find our projects helpful to your research, please consider citing:
 ```
 @article{
 }
 ```
 
-## Acknowledgements
+## 🍃 Acknowledgements
 Our code is heavily based on projects like [diffusion-image-captioning](https://github.com/xu-shitong/diffusion-image-captioning), [BLIP](https://github.com/salesforce/BLIP) and [Huggingface transformers](https://github.com/huggingface/transformers). Thanks for their splendid works!
