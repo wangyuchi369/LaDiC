@@ -1,21 +1,21 @@
 <h1 align="center">
 🔥 LaDiC: A Diffusion-based Image Captioning Model
 </h1>
-<h3 align="center">
+<h4 align="center">
   <a href="https://wangyuchi369.github.io/">Yuchi Wang<sup>*</sup></a> &nbsp; 
   <a href="https://renshuhuai-andy.github.io/">Shuhuai Ren<sup>*</sup></a> &nbsp;
   Rundong Gao &nbsp;
   <a href="https://yaolinli.github.io/">Linli Yao</a> &nbsp;
   <a href="https://beeevita.github.io/">Qingyan Guo</a>
-  </h3>
-  <h3 align="center">
+  </h4>
+  <h4 align="center">
   Kaikai An &nbsp;
   <a href="https://jianhongbai.github.io/">Jianhong Bai</a> &nbsp;
   <a href="https://xusun26.github.io/">Xu Sun <sup>&dagger;</sup></a>
-</h3>
+</h4>
 
 <br>
-<br>
+
 This is the repo for the official implementation of the NAACL 2024 paper: [LaDiC: Are Diffusion Models Really Inferior to Autoregressive Counterparts for Image-to-text Generation?](https://arxiv.org/pdf/2404.10763.pdf)
 
 ## 💡 Introduction
