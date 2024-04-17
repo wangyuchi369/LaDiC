@@ -1,23 +1,33 @@
 <h1 align="center">
 🔥 LaDiC: A Diffusion-based Image Captioning Model
 </h1>
+<p align="center">
+  <a href="https://wangyuchi369.github.io/">Yuchi Wang*</a> &nbsp; 
+  <a href="https://renshuhuai-andy.github.io/">Shuhuai Ren*</a> &nbsp;
+  Rundong Gao &nbsp;
+  <a href="https://yaolinli.github.io/">Linli Yao</a> &nbsp;
+  <a href="https://beeevita.github.io/">Qingyan Guo</a> &nbsp;
+  </p>
+  <p align="center">
+  Kaikai An &nbsp;
+  <a href="https://jianhongbai.github.io/">Jianhong Bai</a> &nbsp;
+  <a href="https://xusun26.github.io/">Xu Sun</a>
+</p>
 
-This is the repo for the official implementation of the NAACL 2024 paper: **LaDiC: Are Diffusion Models Really Inferior to Autoregressive Counterparts for Image-to-text Generation?**
+This is the repo for the official implementation of the NAACL 2024 paper: [LaDiC: Are Diffusion Models Really Inferior to Autoregressive Counterparts for Image-to-text Generation?](https://arxiv.org/pdf/2404.10763.pdf)
 
 ## 💡 Introduction
 
-Diffusion models have exhibited remarkable capabilities in text-to-image generation. However, their performance in image-to-text generation, specifically image captioning, has lagged behind Auto-Regressive (AR) models. In this work, we revisit diffusion models, highlighting their capacity for **holistic context modeling and parallel decoding**. With these benefits, diffusion models can alleviate the inherent limitations of AR methods, including their **slow inference speed, error propagation, and unidirectional constraints**. 
 
-Furthermore, we identify the prior underperformance of diffusion models stemming from **(1)** the absence of an effective latent space for image-text alignment, and **(2)** the discrepancy between continuous diffusion processes and discrete textual data. In response, we introduce a novel architecture, **LaDiC**, which utilizes a split BERT to create a dedicated latent space for captions and integrates a regularization module to manage varying text lengths. Our framework also includes a diffuser for semantic image-to-text conversion and a Back&Refine technique to enhance token interactivity during inference. 
+Diffusion models have demonstrated remarkable capabilities in text-to-image generation. However, their performance in image-to-text generation has lagged behind Auto-Regressive (AR) models, raising doubts about their applicability for such tasks. In this study, we revisit diffusion models, emphasizing their unique advantages compared to AR methods. We meticulously design a novel latent diffusion-based architecture, LaDiC, to further amplify the previously untapped potential of diffusion models in image-to-text generation.
 
-LaDiC achieves state-of-the-art performance for diffusion-based methods on the MS COCO dataset with 38.2 BLEU@4 and 126.2 CIDEr, demonstrating exceptional performance without pre-training or ancillary modules. This indicates strong competitiveness with AR models, revealing the previously untapped potential of diffusion models in image-to-text generation.
 ## 🚀 Method
 
 <div align=center>
 <img src="img/model.png" width="800" >
 </div>
 
-An overview of our LaDiC model. It mainly **consists of Text Encoder, Diffuser, and Text Decoder**. On the left is the diffusion process, and on the right is the denoising process. Initially, the sentence $c$ is converted into a text latent space $\mathcal{X}$ by the text encoder. Subsequently, diffusion is performed on the text latent space, wherein a diffuser is trained to denoise noisy text latent representations $x_t$. Finally, the predicted text latent representation $\hat{x}_0$ without noise is passed through a NAR text decoder to generate the final sentence $\hat{c}$.
+An overview of our LaDiC model. It mainly consists of the Image Encoder, Text Encoder, Diffuser, and Text Decoder. The diffusion process is depicted on the left, while the denoising process is depicted on the right. Initially, the caption $c$ is encoded into a text latent $x_0$ by the text encoder. Subsequently, diffusion process occurs within the textual latent space $\mathcal{X}$, where a diffuser is trained to restore the noisy text latent $x_t$ to its clean counterparts $\hat{x}_0$, guided by the associated image. Finally, the denoised text latent $\hat{x}_0$ is passed through a NAR text decoder to generate the final caption $\hat{c}$.
 
 ## 📖 Experimental Results
 
@@ -25,13 +35,13 @@ An overview of our LaDiC model. It mainly **consists of Text Encoder, Diffuser, 
 <img src="img/results.png" width="800" >
 </div>
 
-Comparison results on COCO dataset, where B@4, M, R, C denote BLEU@4, METEOR, ROUGE-L, CIDEr and SPICE scores. We gray out pretrained models. * represents results of models trained by ourselves. For a fair comparison, all models will not incorporate  results by CIDEr optimization. Additionally, for reference, the inference time measured on an A100 GPU for inference step 5 is 0.020 s/img and step 10 is 0.105 s/img. We can see that our model **achieves state-of-the-art performance across various metrics for both diffusion-based and traditional NAR models, and exhibits comparable performance with some well-established pretraining auto-regressive frameworks**, despite being trained on significantly less data.
+Comparison results on COCO dataset. We can see that our model **achieves state-of-the-art performance across various metrics for both diffusion-based and traditional NAR models, and exhibits comparable performance with some well-established pretraining auto-regressive frameworks**, despite being trained on significantly less data.
 
 <div align=center>
 <img src="img/intro.png" width="800" >
 </div>
 
-Apart from achieving exceptional performance, we seek to emphasize the unique advantages of diffusion-based models over Autoregressive (AR) methods. Comparing the inference latency, BLEU score, and generation approach with BLIP as shown above, we observe the superiority of our model in:
+Apart from achieving exceptional performance, compare to AR methods, we also observe the superiority of our model in:
 
 - **Parallel Token Emission**: Diffusion-based model emits all tokens in parallel, effectively reducing the inference latency compared to autoregressive models, particularly as the length of the caption increases.
 
@@ -107,15 +117,20 @@ python coco_eval.py
 
 ## 📆 TODO List
 - [ ] Add more scripts for more flexible testing.
-- [ ] Clean unrelated code.
 - [ ] Provide pretrained checkpoint.
 - [x] Provide training and testing code.
-- [ ] Paper released on arXiv.
+- [x] Paper released on arXiv.
 
 ## ☕ Citation
  If you find our projects helpful to your research, please consider citing our paper:
 ```
-@article{
+@misc{wang2024ladic,
+      title={LaDiC: Are Diffusion Models Really Inferior to Autoregressive Counterparts for Image-to-Text Generation?}, 
+      author={Yuchi Wang and Shuhuai Ren and Rundong Gao and Linli Yao and Qingyan Guo and Kaikai An and Jianhong Bai and Xu Sun},
+      year={2024},
+      eprint={2404.10763},
+      archivePrefix={arXiv},
+      primaryClass={cs.AI}
 }
 ```
 For any issues or further discussions, feel free to contact wangyuchi369@gmail.com
