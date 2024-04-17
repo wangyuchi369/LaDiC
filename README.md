@@ -1,18 +1,18 @@
 <h1 align="center">
 🔥 LaDiC: A Diffusion-based Image Captioning Model
 </h1>
-<p align="center">
+<h5 align="center">
   <a href="https://wangyuchi369.github.io/">Yuchi Wang*</a> &nbsp; 
   <a href="https://renshuhuai-andy.github.io/">Shuhuai Ren*</a> &nbsp;
   Rundong Gao &nbsp;
   <a href="https://yaolinli.github.io/">Linli Yao</a> &nbsp;
-  <a href="https://beeevita.github.io/">Qingyan Guo</a> &nbsp;
-  </p>
-  <p align="center">
+  <a href="https://beeevita.github.io/">Qingyan Guo</a>
+  </h5>
+  <h5 align="center">
   Kaikai An &nbsp;
   <a href="https://jianhongbai.github.io/">Jianhong Bai</a> &nbsp;
   <a href="https://xusun26.github.io/">Xu Sun</a>
-</p>
+</h5>
 
 This is the repo for the official implementation of the NAACL 2024 paper: [LaDiC: Are Diffusion Models Really Inferior to Autoregressive Counterparts for Image-to-text Generation?](https://arxiv.org/pdf/2404.10763.pdf)
 
@@ -24,7 +24,7 @@ Diffusion models have demonstrated remarkable capabilities in text-to-image gene
 ## 🚀 Method
 
 <div align=center>
-<img src="img/model.png" width="800" >
+<img src="img/model_arch.png" width="800" >
 </div>
 
 An overview of our LaDiC model. It mainly consists of the Image Encoder, Text Encoder, Diffuser, and Text Decoder. The diffusion process is depicted on the left, while the denoising process is depicted on the right. Initially, the caption $c$ is encoded into a text latent $x_0$ by the text encoder. Subsequently, diffusion process occurs within the textual latent space $\mathcal{X}$, where a diffuser is trained to restore the noisy text latent $x_t$ to its clean counterparts $\hat{x}_0$, guided by the associated image. Finally, the denoised text latent $\hat{x}_0$ is passed through a NAR text decoder to generate the final caption $\hat{c}$.
