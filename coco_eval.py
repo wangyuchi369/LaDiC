@@ -21,7 +21,7 @@ def inference(x, tokenizer, model, time_difference = 0):
     x_t = torch.randn((x["image"].shape[0], MAX_LENGTH , IN_CHANNEL), device=device)  # Gaussian noise (bsz, seqlen, 768)
     # each prediction involves multiple generation steps
     x_pred = torch.zeros_like(x_t, device=device)
-    STEP = 200
+    STEP = 30
     X_SIGMA.to(device)
     X_MEAN.to(device)
     time_start = time.time()
@@ -180,7 +180,7 @@ if __name__ == '__main__':
     config = {'image_size': 224, 'ann_root': 'datasets/COCO/', 'image_root': 'datasets/COCO'}
     train_set, val_set, test_set = create_dataset('caption_coco', config)
     val_loader = DataLoader(val_set, shuffle=False, batch_size=100, drop_last=False, num_workers=4)
-    test_loader = DataLoader(test_set, shuffle=False, batch_size=2, drop_last=False, num_workers=4)
+    # test_loader = DataLoader(test_set, shuffle=False, batch_size=100, drop_last=False, num_workers=4)
     model_evaluate(model, val_set, val_loader)
     if not os.path.exists('result'):
         os.makedirs('result', exist_ok=True)
