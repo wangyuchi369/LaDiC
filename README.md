@@ -57,6 +57,7 @@ Required packages and dependencies are listed in the `ladic.yaml` file. You can 
 ```bash
 conda env create -f ladic.yaml
 conda activate ladic
+pip install git+https://github.com/openai/CLIP.git
 ```
 
 We also provide docker image as follows:
@@ -82,11 +83,13 @@ We test on the COCO dataset. You can download [MSCOCO dataset](https://cocodatas
 
 Meanwhile, we follow Karpathy split, and its annotation files can be found in its [orginial paper](https://cs.stanford.edu/people/karpathy/deepimagesent/). Our code will also automatically download these files and you may find them in `datasets/` folder.
 
-## 🧰 Required pretrained models
+## 🧰 Pretrained models
 
 In our LaDiC model, Text Encoder and Decoder are initialized from BERT-base-uncased, which can be downloaded from [Huggingface](https://huggingface.co/bert-base-uncased).
 
 As for image encoder, we utilized pretrained ViT in BLIP. You may download from [here](https://storage.googleapis.com/sfr-vision-language-research/BLIP/models/model_base_capfilt_large.pth) and put it into `pretrained_ckpt` folder. More information can be found in [BLIP&#39;s official repo](https://github.com/salesforce/BLIP).
+
+We provide a version of our pre-trained weights [here](https://drive.google.com/file/d/1oJptCY4oGkMP-LSTIgfx0mFJfMDpH0uG/view?usp=drive_link).
 
 
 ## 🎇 Training
@@ -101,9 +104,9 @@ We list some important optional parameters as follows. The `notes` parameter is 
 
 ```bash
 parser.add_argument('--notes', type=str, default=None, help='Note to be included in the trial name')
-parser.add_argument('--bsz', type=int, default=5, help='batch size')
-parser.add_argument('--seqlen', type=int, default=80, help='sequence length')
-parser.add_argument('--epoch', type=int, default=10, help='epoch num')
+parser.add_argument('--bsz', type=int, default=64, help='batch size')
+parser.add_argument('--seqlen', type=int, default=24, help='sequence length')
+parser.add_argument('--epoch', type=int, default=60, help='epoch num')
 parser.add_argument('--resume_epoch', type=int, default=0, help='start epoch of resume')
 parser.add_argument('--resume_ckpt', type=str, default=None, help='resume or not')
 parser.add_argument('--logdir', type=str, default='checkpoint', help='logdir')
@@ -118,8 +121,7 @@ python coco_eval.py
 ```
 
 ## 📆 TODO List
-- [ ] Add more scripts for more flexible testing.
-- [ ] Provide pretrained checkpoint.
+- [x] Provide pretrained checkpoint.
 - [x] Provide training and testing code.
 - [x] Paper released on arXiv.
 
