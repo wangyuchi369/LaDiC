@@ -5,10 +5,8 @@ from torchvision.transforms.functional import InterpolationMode
 from transformers import BertTokenizer
 
 from dataload.coco_karpathy_dataset import coco_karpathy_train, coco_karpathy_caption_eval
-# from dataload.flickr30k_dataset import flickr30k_train, flickr30k_retrieval_eval
 from dataload.para_cap_dataset import para_train, para_eval
-# from dataload.coco_with_object import coco_karpathy_train_with_pos, coco_karpathy_caption_eval_with_object
-# from dataload.coco_with_yolo_object import coco_karpathy_train_with_yolo_object, coco_karpathy_caption_eval_with_yolo_object
+
 # from transform.randaugment import RandomAugment
 
 
@@ -34,33 +32,18 @@ def create_dataset(dataset, config, min_scale=0.5):
 
     
     if dataset=='caption_coco':
-        train_dataset = coco_karpathy_train(transform_train, tokenizer, image_root='datasets/COCO/', ann_root='datasets/COCO/karpathy_split')
-        val_dataset = coco_karpathy_caption_eval(transform_test, tokenizer, image_root='datasets/COCO/', ann_root='datasets/COCO/karpathy_split', split='val')
-        test_dataset = coco_karpathy_caption_eval(transform_test, tokenizer, image_root='datasets/COCO/', ann_root='datasets/COCO/karpathy_split', split='test')
+        train_dataset = coco_karpathy_train(transform_train, tokenizer, image_root=config['image_root'], ann_root=config['ann_root'])
+        val_dataset = coco_karpathy_caption_eval(transform_test, tokenizer, image_root=config['image_root'], ann_root=config['ann_root'], split='val')
+        test_dataset = coco_karpathy_caption_eval(transform_test, tokenizer, image_root=config['image_root'], ann_root=config['ann_root'], split='test')
         return train_dataset, val_dataset , test_dataset
 
-    # elif dataset=='retrieval_flickr':          
-    #     train_dataset = flickr30k_train(transform_train, config['image_root'], config['ann_root'])
-    #     val_dataset = flickr30k_retrieval_eval(transform_test, config['image_root'], config['ann_root'], 'val') 
-    #     test_dataset = flickr30k_retrieval_eval(transform_test, config['image_root'], config['ann_root'], 'test')          
-    #     return train_dataset, val_dataset, test_dataset
 
     elif dataset=='para_cap':
         train_dataset = para_train(transform_train, tokenizer, image_root='/diffusion/datasets/ParaCap/train_img', ann_root='/diffusion/datasets/ParaCap')
         val_dataset = para_eval(transform_test, tokenizer, image_root='/diffusion/datasets/ParaCap/val_img', ann_root='/diffusion/datasets/ParaCap', split='val')
         test_dataset = para_eval(transform_test, tokenizer, image_root='/diffusion/datasets/ParaCap/test_img', ann_root='/diffusion/datasets/ParaCap', split='test')
         return train_dataset, val_dataset, test_dataset
-    # elif dataset=='caption_coco_pos':
-    #     train_dataset = coco_karpathy_train_with_pos(transform_train, tokenizer, image_root='datasets/COCO/', ann_root='datasets/COCO/karpathy_split')
-    #     val_dataset = coco_karpathy_caption_eval_with_object(transform_test, tokenizer, image_root='datasets/COCO/', ann_root='datasets/COCO/karpathy_split', split='val')
-    #     test_dataset = coco_karpathy_caption_eval_with_object(transform_test, tokenizer, image_root='datasets/COCO/', ann_root='datasets/COCO/karpathy_split', split='test')
-    #     return train_dataset, val_dataset , test_dataset
 
-    # elif dataset=='caption_coco_yolo_objects':
-    #     train_dataset = coco_karpathy_train_with_yolo_object(transform_train, tokenizer, image_root='datasets/COCO/', ann_root='datasets/COCO/karpathy_split')
-    #     val_dataset = coco_karpathy_caption_eval_with_yolo_object(transform_test, tokenizer, image_root='datasets/COCO/', ann_root='datasets/COCO/karpathy_split', split='val')
-    #     test_dataset = coco_karpathy_caption_eval_with_yolo_object(transform_test, tokenizer, image_root='datasets/COCO/', ann_root='datasets/COCO/karpathy_split', split='test')
-    #     return train_dataset, val_dataset , test_dataset
 
 def create_sampler(datasets, shuffles, num_tasks, global_rank):
     samplers = []

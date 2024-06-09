@@ -77,7 +77,7 @@ def train_func(model, trainer, x, scheduler, train=True):
         object_rand_mask = torch.rand(object_emb.shape[0]) < OBJECT_MASK_RATIO
         object_emb[object_rand_mask==1] = repeat(special_emb, 'd -> seq d', seq=object_emb.shape[1]).to(accelerator.device)
 
-    t = torch.randint(0, STEP_TOT, (x_0.shape[0],), device=accelerator.device)  
+    t = torch.randint(0, STEP_TOT, (x_0.shape[0],), device=accelerator.device)  # 随机采样batchsize个时间
     if X_0_PREDICTION or EPSILON_PRED:
         x_t = diffuse_t(x_0, t)  # bsz, seqlen, dmodel
         x_tgt = None

@@ -21,7 +21,7 @@ else:
     alpha_cumprod = torch.cumprod(alphas[:-1], 0)
 
 
-def diffuse_t(x, t):
+def diffuse_t(x, t, is_test=False):
     '''
   input:
     x_shape: [batch_size, seq_len, IN_CHANNEL]
@@ -35,7 +35,10 @@ def diffuse_t(x, t):
 
     epsilon = torch.normal(0, 1, x.shape).to(accelerator.device)
     mean = torch.sqrt(repeat(alpha_cumprod[t], 'b -> b seq d', seq=seq_len, d=dim)) * x  # (bsz, seqlen, emb)
-    bias = epsilon * torch.sqrt(repeat(1 - alpha_cumprod[t], 'b -> b seq d', seq=seq_len, d=dim)) * VAR_DILATION
+    if not is_test:
+      bias = epsilon * torch.sqrt(repeat(1 - alpha_cumprod[t], 'b -> b seq d', seq=seq_len, d=dim)) * VAR_DILATION
+    else:
+      bias = epsilon * torch.sqrt(repeat(1 - alpha_cumprod[t], 'b -> b seq d', seq=seq_len, d=dim)) * VAR_DILATION_VAL
     return mean + bias
 
 

@@ -37,7 +37,7 @@ def inference(x, tokenizer, model, time_difference = 0):
         # out1 = model.space_decoder(cond_noise)
         # indexes1 = nn.functional.softmax(out1, dim=-1).argmax(dim=-1)
         # cond_noise = model.space_encoder(indexes1)[0]
-        uncond_pred = model( torch.zeros_like(x["image"], device=device), torch.cat([x_t, x_pred], dim=-1).to(device),
+        uncond_pred = model(torch.zeros_like(x["image"], device=device), torch.cat([x_t, x_pred], dim=-1).to(device),
                                 torch.ones((x["image"].shape[0], MAX_LENGTH), device=device),
                                 # torch.tensor([1, 0], device=device).repeat(x["attention_mask"].shape[0], 1),
                                 torch.tensor([t_diff], device=device))
@@ -52,7 +52,7 @@ def inference(x, tokenizer, model, time_difference = 0):
             to_be_updated_idx = idx[:,:MAX_LENGTH//3].to(device)
             gaussian_noise = torch.randn_like(x_pred).to(x_pred.device)
             # x_pred[to_be_updated_idx, :] = gaussian_noise[to_be_updated_idx, :].clone()
-            x_t = diffuse_t(x_pred, torch.tensor([t], device=device) - STEP)
+            x_t = diffuse_t(x_pred, torch.tensor([t], device=device) - STEP, is_test=True)
             x_t[torch.arange(x_pred.shape[0])[:, None], to_be_updated_idx] = gaussian_noise[torch.arange(x_t.shape[0])[:, None], to_be_updated_idx].clone()
             # indexes1 = nn.functional.softmax(out1, dim=-1).argmax(dim=-1)
             # pred_x0 = (model.space_encoder(indexes1)[0] - X_MEAN)/X_SIGMA
@@ -60,7 +60,7 @@ def inference(x, tokenizer, model, time_difference = 0):
             flag = False
         elif t > STEP:
             # noise = pred_x0
-            x_t = diffuse_t(x_pred, torch.tensor([t], device=device) - STEP)
+            x_t = diffuse_t(x_pred, torch.tensor([t], device=device) - STEP, is_test=True)
             #x_t = p_sample(x_t[:, :MAX_LENGTH, :], x_pred, torch.tensor([t], device=device) , STEP)
         t -= STEP
     cond_pred = x_pred * X_SIGMA + X_MEAN
@@ -141,7 +141,7 @@ def coco_caption_eval(coco_gt_root, results_file, split):
 
     download_url(urls[split], coco_gt_root)
     annotation_file = os.path.join(coco_gt_root, filenames[split])
-    bert_score = cal_bert_score(results_file, annotation_file)
+    # bert_score = cal_bert_score(results_file, annotation_file)
 
     # create coco object and coco_result object
     coco = COCO(annotation_file)
@@ -165,22 +165,22 @@ def coco_caption_eval(coco_gt_root, results_file, split):
     print(f'bert score: {bert_score:.3f}')
     return coco_eval
 if __name__ == '__main__':
-    MODEL_NAME = 'xxxxxxx'
+    MODEL_NAME = 'xxxxx'
     model = Diffuser_with_LN(image_size=224)
     PRETRAINED_DIR = 'pretrained_ckpt'
-    RESULT_FILE = 'yyyy'
+    RESULT_FILE = '666'
     if not os.path.exists(PRETRAINED_DIR):
         os.mkdir(PRETRAINED_DIR)
     model.visual_encoder, _ = load_checkpoint(model.visual_encoder, f'{PRETRAINED_DIR}/model_base_capfilt_large.pth')
     model.load_state_dict(torch.load(
-        f"{MODEL_NAME}/acc_epoch_59/pytorch_model.bin", map_location=device))
+        f"{MODEL_NAME}/acc_epoch_xxx/pytorch_model.bin", map_location=device))
     model = model.to(device)
     from dataload import create_dataset
     from torch.utils.data import DataLoader
-    config = {'image_size': 224, 'ann_root': 'datasets/COCO/', 'image_root': 'datasets/COCO'}
+    config = {'image_size': 224, 'ann_root': 'datasets/COCO/', 'image_root': '/mldl/v-yuchiwang/FEDIC/datasets/COCO'}
     train_set, val_set, test_set = create_dataset('caption_coco', config)
-    val_loader = DataLoader(val_set, shuffle=False, batch_size=100, drop_last=False, num_workers=4)
-    # test_loader = DataLoader(test_set, shuffle=False, batch_size=100, drop_last=False, num_workers=4)
+    val_loader = DataLoader(val_set, shuffle=False, batch_size=200, drop_last=False, num_workers=4)
+    test_loader = DataLoader(test_set, shuffle=False, batch_size=200, drop_last=False, num_workers=4)
     model_evaluate(model, val_set, val_loader)
     if not os.path.exists('result'):
         os.makedirs('result', exist_ok=True)

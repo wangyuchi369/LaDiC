@@ -51,7 +51,8 @@ parser.add_argument('--epoch', type=int, default=60, help='epoch num')
 parser.add_argument('--resume_epoch', type=int, default=0, help='start epoch of resume')
 parser.add_argument('--resume_ckpt', type=str, default=None, help='resume or not')
 parser.add_argument('--logdir', type=str, default='checkpoint', help='logdir')
-parser.add_argument('--var_dilate', type=float, default=9, help='variance dilate in diffusion')
+parser.add_argument('--var_dilate', type=float, default=4, help='variance dilate in diffusion')
+parser.add_argument('--var_dilate_val', type=float, default=1, help='variance dilate in diffusion during validation')
 parser.add_argument('--using_time', type=bool, default=True, help='using time or not')
 parser.add_argument('--beta_min', type=float, default=0.0001, help='Minimum value of beta')
 parser.add_argument('--beta_max', type=float, default=0.02, help='Maximum value of beta')
@@ -147,6 +148,7 @@ USING_TIME = args.using_time
 START_EPOCH = args.resume_epoch
 RESUME_FILE = args.resume_ckpt
 VAR_DILATION = args.var_dilate
+VAR_DILATION_VAL = args.var_dilate_val
 SELF_COND = args.self_cond
 MODEL_NAME = f"{notes}_epoch{EPOCH_NUM}_maxlen_{MAX_LENGTH}_x_0_predict{X_0_PREDICTION}__use_x_t{USE_X_T_LOSS}_use_x_1{USE_X_1_LOSS}_use_prob{USE_PROB_LOSS}"
 RESULT_FILE = f'{MODEL_NAME}_res'
